@@ -38,6 +38,16 @@ namespace Stop_nShop
 
             builder.Services.AddSignalR();
 
+            //builder.Services.AddCors(options =>
+            //{
+            //    options.AddPolicy("CORSPolicy",
+            //        builder => builder
+            //        .AllowAnyMethod()
+            //        .AllowAnyHeader()
+            //        .AllowCredentials()
+            //        .SetIsOriginAllowed((hosts) => true));
+            //});
+
             builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(@"Keys"));
 
             builder.Services.AddDbContext<StopAndShopDBContext>(options =>
@@ -62,7 +72,7 @@ namespace Stop_nShop
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IInterestedService,InterestedService>();
             builder.Services.AddScoped<IInterestedRepository, InterestedRepository>();
-
+           
 
 
             var app = builder.Build();
@@ -88,6 +98,7 @@ namespace Stop_nShop
             app.UseAuthorization();
             app.MapControllers();
             app.MapHub<ChatHub>("/chatHub");
+            app.MapHub<BroadcastHub>("/broadCastHub");
             app.Run();
         }
     }
