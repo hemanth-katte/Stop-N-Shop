@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.DataProtection;
+using Stop_nShop.Hubs;
 
 namespace Stop_nShop
 {
@@ -19,7 +20,7 @@ namespace Stop_nShop
 
             // Add services to the container.
 
-                builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -34,6 +35,8 @@ namespace Stop_nShop
                     };
                     
                 });
+
+            builder.Services.AddSignalR();
 
             builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(@"Keys"));
 
@@ -84,7 +87,7 @@ namespace Stop_nShop
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
-
+            app.MapHub<ChatHub>("/chatHub");
             app.Run();
         }
     }

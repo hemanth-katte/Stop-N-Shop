@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Stop_nShop.DTOs.RequestDTOs;
+using Stop_nShop.Hubs;
 using Stop_nShop.Models.Enums;
 using Stop_nShop.Models.Responses;
 using Stop_nShop.Service;
@@ -16,13 +18,15 @@ namespace Stop_nShop.Controllers
         public readonly IProductService _productService;
         public readonly IInterestedService interestedService;
         public readonly IOrderService orderService;
+        public readonly IHubContext<BroadcastHub,IBroadcastHubClient> hubContext;
 
-        public SellerController(ISellerService sellerService, IProductService productService,IInterestedService interestedService,IOrderService orderService)
+        public SellerController(ISellerService sellerService, IProductService productService,IInterestedService interestedService,IOrderService orderService,IHubContext<BroadcastHub,IBroadcastHubClient> hubContext)
         {
             _sellerService = sellerService;
             _productService = productService;
             this.interestedService = interestedService;
             this.orderService = orderService;
+            this.hubContext = hubContext;    
         }
 
         //add new seller
@@ -120,6 +124,17 @@ namespace Stop_nShop.Controllers
             if (response.Success)
                 return Ok(response);
             return BadRequest(response);
+        }
+
+        //broadcast message to all users
+        [HttpPost("boradcastMessage")]
+        public async Task<IActionResult> BroadcastMessage([FromQuery] List<string> offers)
+        {
+            var resposne = await hubContext.Clients.All.BroadcastOffersToUsers(offers);
+
+            if(resposne.Equals("Offers sent to all users!"))
+                return Ok(resposne);
+            return BadRequest(resposne);
         }
 
 
