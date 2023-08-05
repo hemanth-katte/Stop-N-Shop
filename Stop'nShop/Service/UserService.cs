@@ -1,19 +1,19 @@
 ﻿using MailKit.Security;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using MimeKit;
 using MimeKit.Text;
 using Stop_nShop.DTOs.RequestDTOs;
 using Stop_nShop.DTOs.ResponseDto;
 using Stop_nShop.Models;
-using Stop_nShop.Models.Responses;
-using Stop_nShop.Repository;
 using System.IdentityModel.Tokens.Jwt;
 using MailKit.Net.Smtp;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.DataProtection;
+using Stop_nShop.Service.ServiceInterface;
+using Stop_nShop.Repository.RepositoryInterface;
+using Stop_nShop.Models.Responses;
+using Stop_nShop.Models.Enums;
 
 namespace Stop_nShop.Service
 {
@@ -39,7 +39,7 @@ namespace Stop_nShop.Service
                 userAddress = userRequestDto.address,
                 userPhone = userRequestDto.phone,
                 userPassword = EncryptPassword(userRequestDto.password),
-                userStatus = Models.Enums.UserStatus.Active,
+                userStatus = UserStatus.Active,
             };
 
             var result = await userRepository.AddUserAsync(user);

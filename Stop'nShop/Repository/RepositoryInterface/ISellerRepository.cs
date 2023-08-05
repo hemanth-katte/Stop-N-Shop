@@ -2,7 +2,7 @@
 using Stop_nShop.Models;
 using Stop_nShop.Models.Responses;
 
-namespace Stop_nShop.Repository
+namespace Stop_nShop.Repository.RepositoryInterface
 {
     public interface ISellerRepository
     {

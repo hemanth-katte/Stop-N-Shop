@@ -5,6 +5,8 @@ using Stop_nShop.DTOs.ResponseDto;
 using Stop_nShop.Models;
 using Stop_nShop.Models.Enums;
 using Stop_nShop.Models.Responses;
+using Stop_nShop.Repository.RepositoryInterface;
+
 
 namespace Stop_nShop.Repository
 {

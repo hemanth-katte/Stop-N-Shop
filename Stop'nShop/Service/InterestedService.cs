@@ -3,7 +3,8 @@ using Stop_nShop.DTOs.ResponseDto;
 using Stop_nShop.Models;
 using Stop_nShop.Models.Enums;
 using Stop_nShop.Models.Responses;
-using Stop_nShop.Repository;
+using Stop_nShop.Repository.RepositoryInterface;
+using Stop_nShop.Service.ServiceInterface;
 
 namespace Stop_nShop.Service
 {

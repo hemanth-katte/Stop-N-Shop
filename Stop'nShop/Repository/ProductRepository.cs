@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Stop_nShop.Data;
-using Stop_nShop.DTOs.RequestDTOs;
 using Stop_nShop.Models;
 using Stop_nShop.Models.Responses;
-using Stop_nShop.Service;
+using Stop_nShop.Repository.RepositoryInterface;
+
 
 namespace Stop_nShop.Repository
 {

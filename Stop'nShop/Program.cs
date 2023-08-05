@@ -9,6 +9,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.DataProtection;
 using Stop_nShop.Hubs;
+using Stop_nShop.Service.ServiceInterface;
+using Stop_nShop.Repository.RepositoryInterface;
 
 namespace Stop_nShop
 {
@@ -48,7 +50,7 @@ namespace Stop_nShop
             //        .SetIsOriginAllowed((hosts) => true));
             //});
 
-            builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(@"Keys"));
+            
 
             builder.Services.AddDbContext<StopAndShopDBContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -56,6 +58,8 @@ namespace Stop_nShop
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+
+            builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(@"Keys"));
 
             builder.Services.AddSwaggerGen(c =>
             {

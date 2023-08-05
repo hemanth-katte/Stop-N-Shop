@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Stop_nShop.DTOs.RequestDTOs;
-using Stop_nShop.Hubs;
 using Stop_nShop.Models.Enums;
 using Stop_nShop.Models.Responses;
-using Stop_nShop.Service;
-
+using Stop_nShop.Service.ServiceInterface;
 
 namespace Stop_nShop.Controllers
 {
@@ -18,18 +15,13 @@ namespace Stop_nShop.Controllers
         public readonly IProductService _productService;
         public readonly IInterestedService interestedService;
         public readonly IOrderService orderService;
-        // public readonly IHubContext<BroadcastHub,IBroadcastHubClient> hubContext;
-        // public readonly IBroadcastHubClient broadcastHubClient;
-        public readonly BroadcastHub broadcastHub; 
-        public SellerController(ISellerService sellerService, IProductService productService,IInterestedService interestedService,IOrderService orderService,BroadcastHub broadCastHub) 
+       
+        public SellerController(ISellerService sellerService, IProductService productService,IInterestedService interestedService,IOrderService orderService) 
         {
             _sellerService = sellerService;
             _productService = productService;
             this.interestedService = interestedService;
             this.orderService = orderService;
-           // this.hubContext = hubContext;
-           // this.broadcastHubClient = broadcastHubClient;
-            this.broadcastHub = broadCastHub;
 
         }
 
@@ -45,33 +37,33 @@ namespace Stop_nShop.Controllers
 
         }
 
-        //add new product
-        [HttpPost("addProduct")]
+        ////add new product
+        //[HttpPost("addProduct")]
 
-        public async Task<IActionResult> AddProduct([FromBody] ProductRequestDto productRequestDto)
-        {
-            var result = await _productService.AddProductAsync(productRequestDto);
+        //public async Task<IActionResult> AddProduct([FromBody] ProductRequestDto productRequestDto)
+        //{
+        //    var result = await _productService.AddProductAsync(productRequestDto);
 
-            if (result.Success)
-                return Ok(result);
-            return BadRequest(result);
+        //    if (result.Success)
+        //        return Ok(result);
+        //    return BadRequest(result);
             
-        }
+        //}
 
 
-        //delete product
-        [HttpDelete("{productId}")]
-        public async Task<ActionResult<ServiceResponse<bool>>> DeleteProductAsync(int productId)
-        {
-            var response = await _productService.DeleteProductAsync(productId);
+        ////delete product
+        //[HttpDelete("{productId}")]
+        //public async Task<ActionResult<ServiceResponse<bool>>> DeleteProductAsync(int productId)
+        //{
+        //    var response = await _productService.DeleteProductAsync(productId);
 
-            if (!response.Success)
-            {
-                return BadRequest(response); 
-            }
+        //    if (!response.Success)
+        //    {
+        //        return BadRequest(response); 
+        //    }
 
-            return Ok(response); 
-        }
+        //    return Ok(response); 
+        //}
 
         //add to interested list(wishlist/cartlist)
 
@@ -85,50 +77,56 @@ namespace Stop_nShop.Controllers
         //    return BadRequest(response);
         //}
 
-        //fetch all products of seller
-        [HttpGet("findAllProductsSeller")]
-        public async Task<IActionResult> FindAllProductsSeller([FromQuery] int sellerId)
-        {
-            var response = await _productService.ViewAllProductsSellerAsync(sellerId);
+        ////fetch all products of seller
+        //[HttpGet("findAllProductsSeller")]
+        //public async Task<IActionResult> FindAllProductsSeller([FromQuery] int sellerId)
+        //{
+        //    var response = await _productService.ViewAllProductsSellerAsync(sellerId);
 
-            if(response.Success)
-                return Ok(response);
-            return BadRequest(response);
-        }
+        //    if(response.Success)
+        //        return Ok(response);
+        //    return BadRequest(response);
+        //}
 
 
-        //fetch all orders for the seller
-        [HttpGet("findAllOrdersPlaced")]
-        public async Task<IActionResult> FindAllOrdersSeller([FromQuery] int sellerId)
-        {
-            var response = await orderService.FetchAllOrdersSellerAsync(sellerId);
+        ////fetch all orders for the seller
+        //[HttpGet("findAllOrdersPlaced")]
+        //public async Task<IActionResult> FindAllOrdersSeller([FromQuery] int sellerId)
+        //{
+        //    var response = await orderService.FetchAllOrdersSellerAsync(sellerId);
 
-            if (response.Success)
-                return Ok(response);
-            return BadRequest(response);
-        }
+        //    if (response.Success)
+        //        return Ok(response);
+        //    return BadRequest(response);
+        //}
 
-        //process the new orders placed 
-        [HttpPut("processOrders")]
-        public async Task<IActionResult> ProcessNewOrdersAsync([FromQuery]int sellerId, [FromQuery] int orderId)
-        {
-            var response = await orderService.ProcessNewOrderAsync(sellerId, orderId);
+       
+        ///// <summary>
+        ///// To process the new orders
+        ///// </summary>
+        ///// <param name="sellerId"></param>
+        ///// <param name="orderId"></param>
+        ///// <returns>  </returns>
+        //[HttpPut("processOrders")]
+        //public async Task<IActionResult> ProcessNewOrdersAsync([FromQuery]int sellerId, [FromQuery] int orderId)
+        //{
+        //    var response = await orderService.ProcessNewOrderAsync(sellerId, orderId);
 
-            if (response.Success)
-                return Ok(response);
-            return BadRequest(response);   
-        }
+        //    if (response.Success)
+        //        return Ok(response);
+        //    return BadRequest(response);   
+        //}
 
-        //show new orders placed for seller
-        [HttpGet("getNewOrders")]
-        public async Task<IActionResult> ShowNewOrdersPlacedSeller([FromQuery] int sellerId, [FromQuery] OrderStatus orderStatus)
-        {
-            var response = await orderService.ShowNewOrdersPlaced(sellerId, orderStatus);
+        ////show new orders placed for seller
+        //[HttpGet("getNewOrders")]
+        //public async Task<IActionResult> ShowNewOrdersPlacedSeller([FromQuery] int sellerId, [FromQuery] OrderStatus orderStatus)
+        //{
+        //    var response = await orderService.ShowNewOrdersPlaced(sellerId, orderStatus);
 
-            if (response.Success)
-                return Ok(response);
-            return BadRequest(response);
-        }
+        //    if (response.Success)
+        //        return Ok(response);
+        //    return BadRequest(response);
+        //}
 
         ////broadcast message to all users
         //[HttpPost("boradcastMessage")]

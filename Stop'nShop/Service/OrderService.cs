@@ -1,10 +1,11 @@
-﻿using Microsoft.Identity.Client;
-using Stop_nShop.DTOs.RequestDTOs;
+﻿using Stop_nShop.DTOs.RequestDTOs;
 using Stop_nShop.DTOs.ResponseDto;
 using Stop_nShop.Models;
 using Stop_nShop.Models.Enums;
 using Stop_nShop.Models.Responses;
-using Stop_nShop.Repository;
+using Stop_nShop.Repository.RepositoryInterface;
+using Stop_nShop.Service.ServiceInterface;
+
 
 namespace Stop_nShop.Service
 {
@@ -43,7 +44,7 @@ namespace Stop_nShop.Service
                 products = products,
                 sellerId = placeOrderDto.sellerId,
                 userId = placeOrderDto.userId,
-                orderStatus = Models.Enums.OrderStatus.BOOKED,
+                orderStatus = OrderStatus.BOOKED,
                 totalPrice = placeOrderDto.price,
                 quantity = placeOrderDto.quantity
 

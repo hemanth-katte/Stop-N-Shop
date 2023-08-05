@@ -2,13 +2,14 @@
 using Stop_nShop.Models.Enums;
 using Stop_nShop.Models.Responses;
 
-namespace Stop_nShop.Repository
+
+namespace Stop_nShop.Repository.RepositoryInterface
 {
     public interface IOrderRepository
     {
         Task<ServiceResponse<Orders>> PlaceOrderAsync(Orders orders);
 
-        Task<ServiceResponse<bool>> CancelOrderAsync(int  orderId);
+        Task<ServiceResponse<bool>> CancelOrderAsync(int orderId);
 
         Task<ServiceResponse<List<Orders>>> FetchAllOrdersAsync(int userId);
 
@@ -18,6 +19,6 @@ namespace Stop_nShop.Repository
 
         Task<ServiceResponse<bool>> CancelOrderSellerAsync(int sellerId, int orderId);
 
-        Task<ServiceResponse<List<Orders>>> ShowNewOrdersPlaced(int  sellerId, OrderStatus status);
+        Task<ServiceResponse<List<Orders>>> ShowNewOrdersPlaced(int sellerId, OrderStatus status);
     }
 }
