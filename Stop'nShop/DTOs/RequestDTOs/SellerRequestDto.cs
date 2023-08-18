@@ -16,7 +16,7 @@ namespace Stop_nShop.DTOs.RequestDTOs
         public string sellerPhone { get; set; }
 
         public string sellerAddress { get; set; }
-
+        
 
     }
 }

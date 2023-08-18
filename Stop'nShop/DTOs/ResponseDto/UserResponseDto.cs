@@ -1,4 +1,4 @@
-﻿using Stop_nShop.Utilities.Enums;
+﻿using Stop_nShop.Models.Enums;
 
 namespace Stop_nShop.DTOs.ResponseDto
 {

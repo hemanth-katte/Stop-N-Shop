@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Stop_nShop.Data;
 
@@ -11,9 +12,11 @@ using Stop_nShop.Data;
 namespace Stop_nShop.Migrations
 {
     [DbContext(typeof(StopAndShopDBContext))]
-    partial class StopAndShopDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230818051901_productupdated")]
+    partial class productupdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

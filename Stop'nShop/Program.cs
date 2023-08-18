@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Stop_nShop.Hubs;
 using Stop_nShop.Service.ServiceInterface;
 using Stop_nShop.Repository.RepositoryInterface;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
 namespace Stop_nShop
 {
@@ -40,18 +41,18 @@ namespace Stop_nShop
 
             builder.Services.AddSignalR();
 
-            //builder.Services.AddCors(options =>
-            //{
-            //    options.AddPolicy("CORSPolicy",
-            //        builder => builder
-            //        .AllowAnyMethod()
-            //        .AllowAnyHeader()
-            //        .AllowCredentials()
-            //        .SetIsOriginAllowed((hosts) => true));
-            //});
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("CORSPolicy",
+                    builder => builder
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    .SetIsOriginAllowed((hosts) => true));
+            });
 
             
-
+            
             builder.Services.AddDbContext<StopAndShopDBContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -90,6 +91,7 @@ namespace Stop_nShop
             //        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API V1");
             //    });
             //}
+            app.UseCors("CORSPolicy");
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

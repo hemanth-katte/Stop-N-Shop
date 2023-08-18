@@ -8,5 +8,7 @@ namespace Stop_nShop.Repository.RepositoryInterface
     {
         Task<ServiceResponse<Seller>> AddSellerAsync(Seller seller);
 
+        Task<ServiceResponse<Seller>> AuthenticateSeller(string sellerEmail, string sellerPassword);
+
     }
 }

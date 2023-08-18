@@ -2,13 +2,13 @@
 {
     public class FilterViewProductRequestDto
     {
-        public string name { get; set; }
+        public string? name { get; set; }
 
-        public string category { get; set; }
+        public string? category { get; set; }
 
-        public string brand { get; set; }
+        public string? brand { get; set; }
 
-        public int sellerId { get; set; }
+        public int? sellerId { get; set; }
 
     }
 }

@@ -15,7 +15,7 @@ namespace Stop_nShop.Models
         public string sellerPassword { get; set; }
 
 
-        [EmailAddress(ErrorMessage ="Invlid email address")]
+        [EmailAddress(ErrorMessage ="Invalid email address")]
         public string sellerMailId { get; set; }
 
         [Required]

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Stop_nShop.DTOs.RequestDTOs;
-using Stop_nShop.Models.Enums;
 using Stop_nShop.Service.ServiceInterface;
 
 
@@ -13,13 +13,15 @@ namespace Stop_nShop.Controllers
     {
         private readonly IUserService userService;
 
-        public UserController(IUserService _userService)
+        public UserController(IUserService userService)
         {
-            userService = _userService;
+            this.userService = userService;
            
         }
 
         //add new user
+        [AllowAnonymous]
+        [EnableCors("CORSPolicy")]
         [HttpPost("addUser")]
         public async Task<IActionResult> AddUser([FromBody] UserRequestDto userRequestDto)
         {
@@ -32,6 +34,7 @@ namespace Stop_nShop.Controllers
 
         //Login User Generate token
         [AllowAnonymous]
+        [EnableCors("CORSPolicy")]
         [HttpPost("login")]
         public async Task<IActionResult> LoginUser([FromBody] UserLoginDto loginDto)
         {
@@ -132,6 +135,16 @@ namespace Stop_nShop.Controllers
         public async Task<IActionResult> SendEmail([FromBody] SendEmailDto emailDto)
         {
             var response = await userService.SendEmail(emailDto);
+
+            if (response.Success)
+                return Ok(response);
+            return BadRequest(response);
+        }
+
+        [HttpGet("getPassword")]
+        public async Task<IActionResult> GetPassword(int userId)
+        {
+            var response = await userService.GetPassword(userId);
 
             if (response.Success)
                 return Ok(response);

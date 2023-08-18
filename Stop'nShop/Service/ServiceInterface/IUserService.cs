@@ -14,5 +14,7 @@ namespace Stop_nShop.Service.ServiceInterface
 
         Task<ServiceResponse<bool>> SendEmail(SendEmailDto sendEmailDto);
 
+        Task<ServiceResponse<string>> GetPassword(int userId);
+
     }
 }

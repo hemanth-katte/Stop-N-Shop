@@ -1,19 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.EntityFrameworkCore;
 using Stop_nShop.Data;
 using Stop_nShop.DTOs.RequestDTOs;
 using Stop_nShop.Models;
 using Stop_nShop.Models.Responses;
 using Stop_nShop.Repository.RepositoryInterface;
+
 namespace Stop_nShop.Repository
+
 
 {
     public class UserRepository : IUserRepository
     {
         public readonly StopAndShopDBContext _dbContext;
-
-        public UserRepository(StopAndShopDBContext dbContext)
+        private readonly IDataProtector dataProtector;
+        public UserRepository(StopAndShopDBContext dbContext, IDataProtectionProvider dataProtectionProvider)
         {
             _dbContext = dbContext;
+            dataProtector = dataProtectionProvider.CreateProtector("PasswordProtection");
         }
 
         public async Task<ServiceResponse<User>> AddUserAsync(User user)
@@ -41,7 +45,9 @@ namespace Stop_nShop.Repository
                 return new ServiceResponse<User>
                 {
                     Success = true,
-                    Data = user
+                    Data = user,
+                    ResultMessage = "User added successfully",
+                    ErrorMessage = "None"
                 };
             }
             catch (DbUpdateException ex)
@@ -49,7 +55,8 @@ namespace Stop_nShop.Repository
                 return new ServiceResponse<User>
                 {
                     Success = false,
-                    ErrorMessage = ex.Message
+                    ErrorMessage = ex.Message,
+                    ResultMessage = "Error occured while storing to database"
                 };
             }
         }
@@ -94,17 +101,37 @@ namespace Stop_nShop.Repository
         public bool ValidateUser(int userId)
         {
             return _dbContext.Users.Any(i => i.userId == userId);
+
         }
 
+        private string DecryptPassword(string encryptedPassword)
+        {
+            string decryptedPassword = dataProtector.Unprotect(encryptedPassword);
+
+            return decryptedPassword;
+        }
         public async Task<ServiceResponse<User>> AuthenticateUser(UserLoginDto user)
         {
             try
             {
                 User user1 = null;
+                
+                //if (_dbContext.Users.Any(u => u.userEmail == user.userEmail && u.userPassword == user.password))
+                //{
+                //    user1 = _dbContext.Users.FirstOrDefault(u => u.userEmail == user.userEmail);
+                //}
 
-                if (_dbContext.Users.Any(u => u.userEmail == user.userEmail && u.userPassword == user.password))
+                user1 = _dbContext.Users.FirstOrDefault(u => u.userEmail == user.userEmail);
+                var password = user1.userPassword;
+                password = DecryptPassword(password);
+                if(password != user.password) 
                 {
-                    user1 = _dbContext.Users.FirstOrDefault(u => u.userEmail == user.userEmail);
+                    return new ServiceResponse<User>
+                    {
+                        Success = false,
+                        ResultMessage = "Please enter proper credentials!",
+                        ErrorMessage = "UserEmail or password does not match"
+                    };
                 }
 
                 if (user1 != null)
@@ -134,6 +161,20 @@ namespace Stop_nShop.Repository
                     ResultMessage = "Some error occured please try after sometime!"
                 };
             }
+        }
+
+        public async Task<ServiceResponse<string>> GetPassword(int userId)
+        {
+            var user = _dbContext.Users.FirstOrDefault(x => x.userId == userId);
+
+            var password = user.userPassword;
+            password = DecryptPassword(password);
+
+            return new ServiceResponse<string>()
+            {
+                Data = password,
+                Success = true,
+            };
         }
     }
 }

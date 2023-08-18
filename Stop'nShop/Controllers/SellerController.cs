@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Stop_nShop.DTOs.RequestDTOs;
 using Stop_nShop.Models.Enums;
 using Stop_nShop.Models.Responses;
@@ -37,106 +38,17 @@ namespace Stop_nShop.Controllers
 
         }
 
-        ////add new product
-        //[HttpPost("addProduct")]
+        //login seller
+        [AllowAnonymous]
+        [HttpPost("loginSeller")]
+        public async Task<IActionResult> LoginSeller(string sellerEmail, string sellerPassword)
+        {
+            var response = await _sellerService.GenerateToken(sellerEmail, sellerPassword);
 
-        //public async Task<IActionResult> AddProduct([FromBody] ProductRequestDto productRequestDto)
-        //{
-        //    var result = await _productService.AddProductAsync(productRequestDto);
+            if(response.Success) return Ok(response);
+            return BadRequest(response);
+        }
 
-        //    if (result.Success)
-        //        return Ok(result);
-        //    return BadRequest(result);
-            
-        //}
-
-
-        ////delete product
-        //[HttpDelete("{productId}")]
-        //public async Task<ActionResult<ServiceResponse<bool>>> DeleteProductAsync(int productId)
-        //{
-        //    var response = await _productService.DeleteProductAsync(productId);
-
-        //    if (!response.Success)
-        //    {
-        //        return BadRequest(response); 
-        //    }
-
-        //    return Ok(response); 
-        //}
-
-        //add to interested list(wishlist/cartlist)
-
-       // [HttpPost("addToInterested")]
-        //public async Task<IActionResult> AddToInterested([FromBody]InterestedRequestDto interestedRequestDto)
-        //{
-        //    var response = await interestedService.AddToInterestedAsync(interestedRequestDto);
-
-        //    if (response.Success)
-        //        return Ok(response);
-        //    return BadRequest(response);
-        //}
-
-        ////fetch all products of seller
-        //[HttpGet("findAllProductsSeller")]
-        //public async Task<IActionResult> FindAllProductsSeller([FromQuery] int sellerId)
-        //{
-        //    var response = await _productService.ViewAllProductsSellerAsync(sellerId);
-
-        //    if(response.Success)
-        //        return Ok(response);
-        //    return BadRequest(response);
-        //}
-
-
-        ////fetch all orders for the seller
-        //[HttpGet("findAllOrdersPlaced")]
-        //public async Task<IActionResult> FindAllOrdersSeller([FromQuery] int sellerId)
-        //{
-        //    var response = await orderService.FetchAllOrdersSellerAsync(sellerId);
-
-        //    if (response.Success)
-        //        return Ok(response);
-        //    return BadRequest(response);
-        //}
-
-       
-        ///// <summary>
-        ///// To process the new orders
-        ///// </summary>
-        ///// <param name="sellerId"></param>
-        ///// <param name="orderId"></param>
-        ///// <returns>  </returns>
-        //[HttpPut("processOrders")]
-        //public async Task<IActionResult> ProcessNewOrdersAsync([FromQuery]int sellerId, [FromQuery] int orderId)
-        //{
-        //    var response = await orderService.ProcessNewOrderAsync(sellerId, orderId);
-
-        //    if (response.Success)
-        //        return Ok(response);
-        //    return BadRequest(response);   
-        //}
-
-        ////show new orders placed for seller
-        //[HttpGet("getNewOrders")]
-        //public async Task<IActionResult> ShowNewOrdersPlacedSeller([FromQuery] int sellerId, [FromQuery] OrderStatus orderStatus)
-        //{
-        //    var response = await orderService.ShowNewOrdersPlaced(sellerId, orderStatus);
-
-        //    if (response.Success)
-        //        return Ok(response);
-        //    return BadRequest(response);
-        //}
-
-        ////broadcast message to all users
-        //[HttpPost("boradcastMessage")]
-        //public async Task<IActionResult> BroadcastMessage([FromQuery] List<string> offers)
-        //{
-        //    await broadcastHub.BroadcastOffersToUsers(offers);
-
-        //    return Ok("Message sent to all users!");
-            
-        //}
 
 
     }

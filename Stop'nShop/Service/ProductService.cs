@@ -21,7 +21,18 @@ namespace Stop_nShop.Service
 
         public async Task<ServiceResponse<ProductResponseDto>> AddProductAsync(ProductRequestDto productRequestDto)
         {
-           // Seller seller = await sellerRepository.find
+            // Seller seller = await sellerRepository.find
+
+            if (productRequestDto.productCategory.Any(char.IsDigit))
+            {
+                return new ServiceResponse<ProductResponseDto>()
+                {
+                    Data = null,
+                    ResultMessage = "Please enter valid products category",
+                    ErrorMessage = "Products category can not contain digits",
+                    Success = false
+                };
+            }
 
             Product product = new Product()
             {
@@ -30,7 +41,8 @@ namespace Stop_nShop.Service
                 brand = productRequestDto.productBrand,
                 quantity = productRequestDto.productQuantity,
                 sellerId = productRequestDto.sellerId,
-                size = productRequestDto.productSize
+                productSize = productRequestDto.productSize,
+                price = productRequestDto.price
             };
 
             var result = await _productRepository.AddProductAsync(product);
@@ -44,7 +56,9 @@ namespace Stop_nShop.Service
                     productBrand = result.Data.brand,
                     productQuantity = result.Data.quantity,
                     productId = result.Data.productId,
-                    sellerId = result.Data.sellerId
+                    sellerId = result.Data.sellerId, 
+                    productSize = result.Data.productSize, 
+                    price = result.Data.price
 
                 } : null,
                 Success = result.Success,

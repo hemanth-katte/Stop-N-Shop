@@ -228,7 +228,7 @@ namespace Stop_nShop.Repository
                 p.productName == product.productName &&
                 p.brand == product.brand && 
                 p.category == product.category && 
-                p.size == product.size &&
+                p.productSize == product.productSize &&
                 p.sellerId == product.sellerId
             );
 

@@ -7,5 +7,7 @@ namespace Stop_nShop.Service.ServiceInterface
     {
         Task<ServiceResponse<SellerRequestDto>> AddSellerAsync(SellerRequestDto sellerRequestDto);
 
+        Task<ServiceResponse<string>> GenerateToken(string sellerEmail, string sellerPassword);
+
     }
 }

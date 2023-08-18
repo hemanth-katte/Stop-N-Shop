@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Stop_nShop.DTOs.RequestDTOs;
 using Stop_nShop.Models.Enums;
+using Stop_nShop.Models.Responses;
 using Stop_nShop.Service;
 using Stop_nShop.Service.ServiceInterface;
 
@@ -28,6 +29,20 @@ namespace Stop_nShop.Controllers
         [HttpPost("addToInterested")]
         public async Task<IActionResult> AddToInterested([FromBody] InterestedRequestDto interestedRequestDto)
         {
+            if(HttpContext.Request.Headers.TryGetValue("UserID",out var userIdHeader) &&
+                int.TryParse(userIdHeader.ToString(),out int userId)) 
+            {
+                interestedRequestDto.userId = userId;
+            }
+            else
+            {
+                return BadRequest(new ServiceResponse<bool>()
+                {
+                    ResultMessage = "User not found please login once again!",
+                    Data = false
+                });
+            }
+
             var response = await interestedService.AddToInterestedAsync(interestedRequestDto);
 
             if (response.Success)

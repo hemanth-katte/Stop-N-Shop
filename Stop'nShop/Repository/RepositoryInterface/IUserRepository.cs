@@ -14,6 +14,7 @@ namespace Stop_nShop.Repository.RepositoryInterface
 
         Task<ServiceResponse<User>> AuthenticateUser(UserLoginDto userLoginDto);
 
+        Task<ServiceResponse<string>> GetPassword(int userId);
 
         bool ValidateUser(int userId);
 

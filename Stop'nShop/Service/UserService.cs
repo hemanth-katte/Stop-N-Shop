@@ -14,6 +14,7 @@ using Stop_nShop.Service.ServiceInterface;
 using Stop_nShop.Repository.RepositoryInterface;
 using Stop_nShop.Models.Responses;
 using Stop_nShop.Models.Enums;
+using System.Text.RegularExpressions;
 
 namespace Stop_nShop.Service
 {
@@ -31,6 +32,61 @@ namespace Stop_nShop.Service
 
         public async Task<ServiceResponse<UserResponseDto>> AddUserAsync(UserRequestDto userRequestDto)
         {
+
+            if (userRequestDto.firstName.Any(char.IsDigit) || userRequestDto.lastName.Any(char.IsDigit))
+            {
+                return new ServiceResponse<UserResponseDto>
+                {
+                    Data = null,
+                    ResultMessage = "Enter valid firstname and lastname",
+                    ErrorMessage = "Please do not include digits in firstname or lastname!",
+                    Success = false
+                };
+            }
+
+            Regex passwordRegex = new Regex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
+
+            if (!passwordRegex.IsMatch(userRequestDto.password))
+            {
+                return new ServiceResponse<UserResponseDto>()
+                {
+
+                    Success = false,
+                    Data = null,
+                    ResultMessage = "Please enter a password that " +
+                    "contains minimum of 8 characteres, at least 1 digit, at least 1 special character, " +
+                    "at least 1 uppercase at least 1 lowercase",
+                    ErrorMessage = "Password doesn't match requirements"
+
+                };
+            }
+
+            Regex emailRegex = new Regex("^\\S+@\\S+\\.\\S+$");
+
+            if (!emailRegex.IsMatch(userRequestDto.email))
+            {
+                return new ServiceResponse<UserResponseDto>()
+                {
+                    Success = false,
+                    Data = null,
+                    ErrorMessage = "Not a valid email id",
+                    ResultMessage = "Please enter a valid email id"
+                };
+            }
+
+            Regex phoneRegex = new Regex(@"^[789]\d{9}$");
+
+            if (phoneRegex.IsMatch(userRequestDto.phone))
+            {
+                return new ServiceResponse<UserResponseDto>()
+                {
+                    Success = false,
+                    Data = null,
+                    ErrorMessage = "Phone number not valid",
+                    ResultMessage = "Please enter valid phone number"
+                };
+            }
+
             var user = new User
             {
                 firstName = userRequestDto.firstName,
@@ -90,6 +146,7 @@ namespace Stop_nShop.Service
 
         public async Task<ServiceResponse<string>> GetToken(UserLoginDto loginDto)
         {
+            
             var result = await userRepository.AuthenticateUser(loginDto);
 
             if (result.Success)
@@ -116,7 +173,10 @@ namespace Stop_nShop.Service
                 {
                     Success = true,
                     Data = tokenString,
-                    ResultMessage = "Here is your security token for the next 20 minutes"
+                    ResultMessage = "Here is your security token for the next 20 minutes",
+                    UserId = result.Data.userId,
+                    UserName = result.Data.firstName
+                    
                 };
             }
 
@@ -178,6 +238,13 @@ namespace Stop_nShop.Service
             string decryptedPassword = dataProtector.Unprotect(encryptedPassword);
 
             return decryptedPassword;
+        }
+
+        public async Task<ServiceResponse<string>> GetPassword(int userId)
+        {
+            var response = await userRepository.GetPassword(userId);
+
+            return response;
         }
 
 

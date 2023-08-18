@@ -1,4 +1,6 @@
-﻿namespace Stop_nShop.DTOs.RequestDTOs
+﻿using Stop_nShop.Utilities.Enums;
+
+namespace Stop_nShop.DTOs.RequestDTOs
 {
     public class ProductRequestDto
     {
@@ -10,7 +12,9 @@
 
         public int productQuantity { get; set; }
 
-        public int productSize { get; set; }
+        public int price { get; set; }
+
+        public ProductSize productSize { get; set; }
 
         public int sellerId { get; set; }
 
