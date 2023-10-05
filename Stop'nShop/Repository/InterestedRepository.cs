@@ -80,7 +80,7 @@ namespace Stop_nShop.Repository
                 {
                     Data = viewInterestedResponseDto,
                     Success = true,
-                    ResultMessage = "Here is your " + status + "list"
+                    ResultMessage = "Here is your" + status + "list"
 
                 };
 
@@ -95,7 +95,36 @@ namespace Stop_nShop.Repository
 
             }
         }
-    
+
+        public async Task<ServiceResponse<bool>> RemoveFromInterestedList(int userId, int productId)
+        {
+            if (stopAndShopDBContext.Interested.Any(i => i.userId == userId && i.productId == productId))
+            {
+                var interestedEntryToDelete = stopAndShopDBContext.Interested.FirstOrDefault(i => i.userId == userId && i.productId == productId);
+                if (interestedEntryToDelete != null)
+                {
+                    stopAndShopDBContext.Interested.Remove(interestedEntryToDelete);
+                    await stopAndShopDBContext.SaveChangesAsync();
+                }
+
+                return new ServiceResponse<bool>()
+                {
+                    Data = true,
+                    Success = true,
+                    ResultMessage = "Product removed from your list"
+                };
+            }
+            return new ServiceResponse<bool>()
+            {
+                Success = false,
+                Data = false,
+                ResultMessage = "Please try again later",
+                ErrorMessage = "There was an error finding the product"
+            };
+        }
+        
+
+
         public bool Existing(int productId, int userId, int sellerId)
         {
             return stopAndShopDBContext.Interested.Any(i => i.productId == productId && i.userId == userId && i.sellerId == sellerId);

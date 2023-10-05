@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Stop_nShop.DTOs.RequestDTOs;
 using Stop_nShop.Models.Enums;
@@ -29,19 +30,6 @@ namespace Stop_nShop.Controllers
         [HttpPost("addToInterested")]
         public async Task<IActionResult> AddToInterested([FromBody] InterestedRequestDto interestedRequestDto)
         {
-            if(HttpContext.Request.Headers.TryGetValue("UserID",out var userIdHeader) &&
-                int.TryParse(userIdHeader.ToString(),out int userId)) 
-            {
-                interestedRequestDto.userId = userId;
-            }
-            else
-            {
-                return BadRequest(new ServiceResponse<bool>()
-                {
-                    ResultMessage = "User not found please login once again!",
-                    Data = false
-                });
-            }
 
             var response = await interestedService.AddToInterestedAsync(interestedRequestDto);
 
@@ -58,10 +46,22 @@ namespace Stop_nShop.Controllers
         /// <param name="status"></param>
         /// <returns></returns>
         //get wishList/cartList
-        [HttpGet("getInterested")]
-        public async Task<IActionResult> GetALlInterested([FromQuery] int userId, [FromQuery] InterestedStatus status)
+        [HttpPost("getInterested")]
+        [EnableCors("CORSPolicy")]
+        public async Task<IActionResult> GetALlInterested([FromBody] FetchInterestedDto fetchInterestedDto)
         {
-            var result = await interestedService.GetAllInterestedAsync(userId, status);
+            var result = await interestedService.GetAllInterestedAsync(fetchInterestedDto.userId, fetchInterestedDto.interestedStatus);
+
+            if (result.Success)
+                return Ok(result);
+            return BadRequest(result);
+        }
+
+        //Remove from interested list
+        [HttpDelete("removeInterested")]
+        public async Task<IActionResult> RemoveFromInterestedList([FromBody] RemoveInterestedRequestDto removeInterestedRequestDto)
+        {
+            var result = await interestedService.RemoveFromInterestedList(removeInterestedRequestDto.userId, removeInterestedRequestDto.productId); 
 
             if (result.Success)
                 return Ok(result);

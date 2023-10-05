@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Stop_nShop.DTOs.RequestDTOs;
 using Stop_nShop.Models.Enums;
@@ -28,6 +29,7 @@ namespace Stop_nShop.Controllers
 
         //add new seller
         [HttpPost("addSeller")]
+        [EnableCors("CORSPolicy")]
         public async Task<IActionResult> AddSeller([FromBody] SellerRequestDto sellerRequestDto)
         {
             var result = await _sellerService.AddSellerAsync(sellerRequestDto);
@@ -41,9 +43,11 @@ namespace Stop_nShop.Controllers
         //login seller
         [AllowAnonymous]
         [HttpPost("loginSeller")]
-        public async Task<IActionResult> LoginSeller(string sellerEmail, string sellerPassword)
+        [EnableCors("CORSPolicy")]
+        public async Task<IActionResult> LoginSeller([FromBody] SellerLoginDto sellerLoginDto)
         {
-            var response = await _sellerService.GenerateToken(sellerEmail, sellerPassword);
+
+            var response = await _sellerService.GenerateToken(sellerLoginDto.sellerEmail, sellerLoginDto.sellerPassword);
 
             if(response.Success) return Ok(response);
             return BadRequest(response);

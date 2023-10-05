@@ -11,5 +11,7 @@ namespace Stop_nShop.Service.ServiceInterface
 
         Task<ServiceResponse<ViewInterestedResponseDto>> GetAllInterestedAsync(int userId, InterestedStatus status);
 
+        Task<ServiceResponse<bool>> RemoveFromInterestedList(int userId, int productId);
+
     }
 }

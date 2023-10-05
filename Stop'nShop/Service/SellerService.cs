@@ -156,7 +156,8 @@ namespace Stop_nShop.Service
                     Success = true,
                     Data = tokenString,
                     ResultMessage = "Here is your security token for the next 20 minutes",
-                    SellerId = result.Data.sellerId
+                    UserId = result.Data.sellerId,
+                    UserName = result.Data.sellerName
 
                 };
             }

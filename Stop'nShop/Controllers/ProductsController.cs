@@ -41,7 +41,7 @@ namespace Stop_nShop.Controllers
         /// <param name="productId"></param>
         /// <returns></returns>
         //delete product
-        [HttpDelete("{productId}")]
+        [HttpDelete("deleteProduct")]
         public async Task<ActionResult<ServiceResponse<bool>>> DeleteProductAsync(int productId)
         {
             var response = await productService.DeleteProductAsync(productId);
@@ -88,6 +88,17 @@ namespace Stop_nShop.Controllers
                 return Ok(result);
             return BadRequest(result);
         }
+
+        [HttpGet("fetchAllTheProducts")]
+        public async Task<IActionResult> FetchAllTheProducts()
+        {
+            var result = await productService.FetchAllTheProducts();
+
+            if (result.Success)
+                return Ok(result);
+            return BadRequest(result);
+        }
+
 
 
     }

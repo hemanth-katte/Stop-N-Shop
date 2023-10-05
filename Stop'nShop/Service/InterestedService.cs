@@ -57,7 +57,7 @@ namespace Stop_nShop.Service
             return resposne;
 
         }
-
+        
         public async Task<ServiceResponse<ViewInterestedResponseDto>> GetAllInterestedAsync(int userId, InterestedStatus status)
         {
 
@@ -79,6 +79,11 @@ namespace Stop_nShop.Service
             };
 
             return response;
+        }
+
+        public async Task<ServiceResponse<bool>> RemoveFromInterestedList(int userId, int productId)
+        {
+            return await interestedRepository.RemoveFromInterestedList(userId, productId);
         }
     }
 }

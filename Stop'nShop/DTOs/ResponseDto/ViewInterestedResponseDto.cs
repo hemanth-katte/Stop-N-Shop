@@ -6,7 +6,7 @@ namespace Stop_nShop.DTOs.ResponseDto
     {
         public int userId { get; set; }
 
-        public ICollection<Product> interestedList { get; set; }
+        public List<Product> interestedList { get; set; }
 
     }
 }

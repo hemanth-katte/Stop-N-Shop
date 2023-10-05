@@ -14,5 +14,8 @@ namespace Stop_nShop.Service.ServiceInterface
         Task<ServiceResponse<List<Product>>> ViewAllProductsSellerAsync(int sellerId);
 
         Task<ServiceResponse<List<FilterViewProductsResponseDto>>> FilterViewProductsUser(string productName, string category, string brand, int sellerId);
+
+        Task<ServiceResponse<List<Product>>> FetchAllTheProducts();
+
     }
 }

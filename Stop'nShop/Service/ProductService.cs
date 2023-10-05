@@ -1,4 +1,5 @@
-﻿using Stop_nShop.DTOs.RequestDTOs;
+﻿using Microsoft.Identity.Client;
+using Stop_nShop.DTOs.RequestDTOs;
 using Stop_nShop.DTOs.ResponseDto;
 using Stop_nShop.Models;
 using Stop_nShop.Models.Responses;
@@ -127,7 +128,15 @@ namespace Stop_nShop.Service
                 
             };
 
-            
+           
+
+        }
+
+        public async Task<ServiceResponse<List<Product>>> FetchAllTheProducts()
+        {
+            var result = await _productRepository.FindAllProductsUser();
+
+            return result;
         }
 
     }
